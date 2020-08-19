@@ -27,4 +27,5 @@ expressions = {
     re.compile('(?i)(.*)(cemeto)(.*)'): 'cemento',
     re.compile('(?i)(.*)(deprtamento)(.*)'): 'departamento',
     re.compile('(?i)(.*)(vvidrio)(.*)'): 'vidrio'
+    re.compile('(?i)(.*)(retencion)((?:\s|$).*)'): 'retención',
 }
