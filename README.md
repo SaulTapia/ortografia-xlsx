@@ -1,4 +1,4 @@
 # Ortografía xlsx
-Un proyecto para ayudar a mi padre en su trabajo
+Un proyecto que arregla errores de ortografía comunes en archivos xlsx
 
 [Deploy](https://xlsx-ortografia.herokuapp.com/)
