@@ -61,8 +61,11 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             try:
                 if fix_xlsx(UPLOAD_FOLDER + '/' + filename,starting_cell,ending_cell,wb):
+                    print('Termina con error 500')
                     abort(500)
+                print('Termina normal')
             except Exception as e:
+                print('Hubo excepción')
                 abort(500)
 
             return redirect(url_for('uploaded_file',

@@ -4,6 +4,7 @@ from .regex_dict_xlsx import expressions
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 def fix_xlsx(filename, starting_cell, ending_cell, sheetname):
     '''Fixes common spanish grammar errors on xlsx files'''
+    print('Empieza el script')
     starting_separator = 0
     ending_separator = 0
     for i, _ in enumerate(starting_cell):
