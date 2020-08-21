@@ -3,7 +3,7 @@
 {% block head %}
     {{ super() }}
     <title>
-        {% block title %}Arreglador de otrografía |{% endblock %}
+        {% block title %}Arreglador de otrografía xlsx |{% endblock %}
     </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
@@ -23,7 +23,9 @@
         </div>
     {% endfor %}
 
-    {% block content %}{% endblock %}
+    <div class="container main-content">
+        {% block content %}{% endblock %}
+    </div>
     {% block scripts %}
         {{ super() }}
     {% endblock %}

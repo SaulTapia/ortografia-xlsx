@@ -1,0 +1,12 @@
+body {
+    background-color: #1f7246;
+}
+.main-title {
+    text-align: center;
+}
+.main-content {
+    background-color:  #7F927F;
+    width: 70%;
+    padding-bottom: 20px;
+    border-radius: 20px;
+}
