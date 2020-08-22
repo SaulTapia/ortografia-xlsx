@@ -9,26 +9,30 @@
 {% endblock %}
 
 {% block body %}
-    {% block navbar %}
-        {% include 'navbar.html' %}
-    {% endblock %}
-    
-    <div class="container main-content">
-        {% for category, message in get_flashed_messages(with_categories=true) %}
-            <div class= "{{ category }}">
-                <button type="button"
-                data-dismiss="alert"
-                class="close">&times;</button>
-    
-                {{ message }}
+    <div id="page-container">
+        <div id="content-wrap">
+            {% block navbar %}
+                {% include 'navbar.html' %}
+            {% endblock %}
+            
+            <div class="container main-content">
+                {% for category, message in get_flashed_messages(with_categories=true) %}
+                    <div class= "{{ category }}">
+                        <button type="button"
+                        data-dismiss="alert"
+                        class="close">&times;</button>
+            
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% block content %}{% endblock %}
             </div>
-        {% endfor %}
-        {% block content %}{% endblock %}
+        </div>
+        {% block footer %}
+            {% include 'footer.html' %}
+        {% endblock %}
     </div>
 
-    {% block footer %}
-        {% include 'footer.html' %}
-    {% endblock %}
     {% block scripts %}
         {{ super() }}
     {% endblock %}
