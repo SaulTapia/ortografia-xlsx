@@ -1,9 +1,11 @@
 html {
     height: 100%;
 }
+
 body {
     background-color: #1f7246;
 }
+
 footer {
     position: absolute;
     bottom: 0;
@@ -15,15 +17,16 @@ footer {
     background-color: #383838;
     color: #9d9d9d;
 }
+
 #page-container {
     position: relative;
     min-height: 100vh;
 }
-  
+
 #content-wrap {
     padding-bottom: 7rem;    /* Footer height */
 }
-  
+
 #footer {
     position: absolute;
     bottom: 0;
@@ -31,11 +34,10 @@ footer {
     height: 2.5rem;            /* Footer height */
 }
 
-
-
 .main-title {
     text-align: center;
 }
+
 .main-content {
     background-color:  #7F927F;
     width: 70%;
@@ -43,6 +45,7 @@ footer {
     padding-top: 20px;
     border-radius: 20px;
 }
+
 .footer-items {
     display: flex;
     justify-content: space-evenly;
