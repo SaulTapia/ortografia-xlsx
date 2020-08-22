@@ -1,2 +1,2 @@
-# trabajo-apa
-Un proyecto para ayudar a mi padre en su trabajo
+# Ortografía xlsx
+Un proyecto que arregla errores de ortografía comunes en archivos xlsx
