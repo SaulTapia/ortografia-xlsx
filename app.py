@@ -1,8 +1,7 @@
 import os
 import glob
-from flask import render_template, url_for, Response, flash, redirect, request, send_from_directory, abort
+from flask import render_template, url_for, Response, redirect, request, send_from_directory, abort, flash
 from werkzeug.utils import secure_filename
-
 
 from app_assets import create_app
 from app_assets.forms import XlsxForm
@@ -37,7 +36,6 @@ def not_found(error):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     files = glob.glob(f"{app.config['UPLOAD_FOLDER']}/*")
-    print(files)
     for f in files:
         os.remove(f)
 
@@ -53,20 +51,15 @@ def index():
         wb = xlsx_form.wb.data 
 
         if file.filename == '':
-            flash('No se seleccionó un archivo')
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
             filename =  secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            try:
-                if fix_xlsx(UPLOAD_FOLDER + '/' + filename,starting_cell,ending_cell,wb):
-                    print('Termina con error 500')
-                    abort(500)
-                print('Termina normal')
-            except Exception as e:
-                print('Hubo excepción')
-                abort(500)
+            result = fix_xlsx(UPLOAD_FOLDER + '/' + filename,starting_cell,ending_cell,wb)
+            if result:
+                flash(result, 'alert alert-danger')
+                return redirect(url_for('index'))
 
             return redirect(url_for('uploaded_file',
                                     filename=filename))
@@ -76,11 +69,8 @@ def index():
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     try:
-        print(app.config['UPLOAD_FOLDER'], filename)
         return send_from_directory(absolute_upload_folder, filename=filename, as_attachment=True)
 
-    except FileNotFoundError as fnfe:
-        print(fnfe)
-        print('Pfffff')
+    except FileNotFoundError:
         abort(404)
 

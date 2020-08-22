@@ -18,72 +18,97 @@ def fix_xlsx(filename, starting_cell, ending_cell, sheetname):
             ending_separator = i
             break
 
-    starting_number = int(starting_cell[starting_separator:])
-    ending_number = int(ending_cell[ending_separator:])
+    starting_number_string = starting_cell[starting_separator:]
+    ending_number_string = ending_cell[ending_separator:]
+    if starting_number_string[0] == '0' or ending_number_string[0] == '0':
+        return 'El número de celda no puede empezar en 0'
+    
+
+    try:
+        starting_number = int(starting_number_string)
+        ending_number = int(ending_number_string)
+    except Exception as e:
+        return 'No juntes números con letras!'
         
     if starting_number > ending_number:
-        return 1
+        return 'El comienzo no puede estar después del final!'
+
+    if ending_number - starting_number > 20000:
+        return 'No haré tanto'
 
     starting_letters = starting_cell[:starting_separator]
     ending_letters = ending_cell[:ending_separator]
+
+    if len(starting_letters) > 3 or len(ending_letters) > 3:
+        return 'No voy a hacer tanto'
+
     if len(starting_letters) > len(ending_letters):
-        return 1
-    elif len(starting_letters) == len(ending_letters):
-        aux_starting = list(starting_letters)
-        aux_ending = list(ending_letters)
-        aux_starting.reverse()
-        aux_ending.reverse()
-        for pair in zip(aux_starting, aux_ending):
-            if pair[0] > pair[1]:
-                return 1
+        return 'El comienzo no puede estar después del final!'
 
-    wb = openpyxl.load_workbook(filename)
-    sheet = wb[sheetname]
-        
+    if len(starting_letters) == len(ending_letters):
+        for pair in zip(starting_letters, ending_letters):
+            if pair[1] > pair[0]:
+                break
+            elif pair[0] > pair[1]:
+                return 'El comienzo no puede estar después del final!'
+    
 
-    #sheet['A1'].value = 'Hola'
-    # wb.save(filename)
 
-    while True:
-        print(f'Arreglando la columna {starting_letters}')
 
-        for i in range(starting_number, ending_number + 1):
-            value = sheet[f'{starting_letters}{i}'].value
-            if type(value) is str:
-                value = value.lower()
-                for expression, word in expressions.items():
-                    while expression.match(value):
-                        value = expression.sub(fr'\g<1>{word}\g<3>', value)
-
-                first_letter = value[0]
-                value = value[1:]
-                sheet[f'{starting_letters}{i}'].value = first_letter.upper() + value
-
-        if starting_letters == ending_letters:
-            break
-
-        letter_index = 1
+    try:
+        wb = openpyxl.load_workbook(filename)
+        sheet = wb[sheetname]
+    except expression as identifier:
+        return 'Esa hoja no existe!'
+    try:
         while True:
-            last_letter = starting_letters[letter_index * -1]
-            if last_letter == 'Z':
-                if letter_index == len(starting_letters):
-                    starting_letters = 'AA' + starting_letters[1:]
-                    break
-                if letter_index == 1:
-                    starting_letters = starting_letters[letter_index * - 1] + 'A'
-                else:
-                    starting_letters = starting_letters[letter_index * - 1] + 'A' + starting_letters[(letter_index * -1) + 1]
+            print(f'Arreglando la columna {starting_letters}')
 
-            else:
-                last_letter_index = alphabet.index(last_letter)
-                if letter_index == 1:
-                    starting_letters= starting_letters[:letter_index * -1] + alphabet[last_letter_index + 1]
-                else:
-                    starting_letters = starting_letters[:letter_index * -1] + alphabet[last_letter_index + 1] + starting_letters[(letter_index * -1) + 1:]
+            for i in range(starting_number, ending_number + 1):
+                value = sheet[f'{starting_letters}{i}'].value
+                if type(value) is str:
+                    value = value.lower()
+                    for expression, word in expressions.items():
+                        while expression.match(value):
+                            value = expression.sub(fr'\g<1>{word}\g<3>', value)
+                            
 
+                    first_letter = value[0]
+                    value = value[1:]
+                    sheet[f'{starting_letters}{i}'].value = first_letter.upper() + value
+
+            if starting_letters == ending_letters:
                 break
 
-            letter_index += 1
+            letter_index = 1
+            while True:
+                last_letter = starting_letters[letter_index * -1]
+                if last_letter not in alphabet:
+                    return 'Todas las letras deben ser mayúsculas, sin acentos y sin ñ'
+
+                if last_letter == 'Z':
+                    if letter_index == len(starting_letters):
+                        starting_letters = 'AA' + starting_letters[1:]
+                        break
+                    if letter_index == 1:
+                        starting_letters = starting_letters[:-1] + 'A'
+                    else:
+                        starting_letters = starting_letters[:letter_index * - 1] + 'A' + starting_letters[(letter_index * -1) + 1]
+
+                else:
+                    last_letter_index = alphabet.index(last_letter)
+                    if letter_index == 1:
+                        starting_letters= starting_letters[:letter_index * -1] + alphabet[last_letter_index + 1]
+                    else:
+                        starting_letters = starting_letters[:letter_index * -1] + alphabet[last_letter_index + 1] + starting_letters[(letter_index * -1) + 1:]
+
+                    break
+
+                letter_index += 1
+
+    except Exception as e:
+        return f'''Revisa bien como ingresaste las celdas\n
+                Error: {e}'''
         
     wb.save(filename)
     return 0
